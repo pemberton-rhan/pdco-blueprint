@@ -1,0 +1,22 @@
+// Import scss files here in the correct order
+
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+// Variables
+@import 'foundations/variables';
+
+// Foundations
+@import 'foundations/reset';
+@import 'foundations/typography';
+@import 'foundations/layout';
+@import 'foundations/spacing';
+
+// Components
+@import 'components/buttons';
+
+// Core Blocks
+//@import 'core-blocks/';
+
+// Posts
+@import 'posts/single';

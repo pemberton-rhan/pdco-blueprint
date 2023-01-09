@@ -1,6 +1,7 @@
 // Required plugins
 const gulp = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
+const sassGlob = require('gulp-sass-glob');
 const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
 const cleanCSS = require('gulp-clean-css');
@@ -9,8 +10,7 @@ const order = require('gulp-order');
 
 // Task to concatenate all .scss and output to dist.css
 gulp.task('sass', function() {
-  return gulp
-    .src('styles/**/*.scss') // get all SCSS files
+  return gulp.src('styles/compile.scss') // get compile.scss. This file has all our imports in it.
     .pipe(sourcemaps.init())
     .pipe(sass()) // compile SCSS to CSS
     .pipe(concat('dist.css')) // concatenate all CSS files into one
@@ -19,7 +19,7 @@ gulp.task('sass', function() {
     .pipe(gulp.dest('styles')); // output the file to the dist folder
 });
 
-Task to concatenate all .js and output to dist.css
+//Task to concatenate all .js and output to dist.css
 gulp.task('scripts', function() {
   return gulp
     .src('scripts/custom/**/*.js')
