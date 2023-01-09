@@ -11,19 +11,15 @@ const order = require('gulp-order');
 gulp.task('sass', function() {
   return gulp
     .src('styles/**/*.scss') // get all SCSS files
-    .pipe(order([
-      'foundations/variables/variables.scss',
-      '*.scss'
-    ]))
     .pipe(sourcemaps.init())
     .pipe(sass()) // compile SCSS to CSS
     .pipe(concat('dist.css')) // concatenate all CSS files into one
-    .pipe(cleanCSS({compatibility: 'ie8'})) // minify the CSS
+    .pipe(cleanCSS()) // minify the CSS
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('styles')); // output the file to the dist folder
 });
 
-// Task to concatenate all .js and output to dist.css
+Task to concatenate all .js and output to dist.css
 gulp.task('scripts', function() {
   return gulp
     .src('scripts/custom/**/*.js')
@@ -34,6 +30,6 @@ gulp.task('scripts', function() {
 
 // Run all gulp tasks on save
 gulp.task('watch', function() {
-  gulp.watch('**/*.scss', gulp.parallel('sass'));
-  gulp.watch('scripts/custom/**/*.js', gulp.parallel('scripts'));
+  gulp.watch('styles/**/*.scss', gulp.parallel('sass'));
+  gulp.watch('scripts/**/*.js', gulp.parallel('scripts'));
 });
