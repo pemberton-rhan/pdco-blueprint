@@ -1,25 +1,46 @@
-// Required plugins
+/* Required plugins
+-------------------------------------------------------------- */
 const gulp = require('gulp');
-const sass = require('gulp-sass')(require('sass'));
-const sassGlob = require('gulp-sass-glob');
-const sourcemaps = require('gulp-sourcemaps');
+const sass = require('gulp-sass')(require('node-sass'));
 const concat = require('gulp-concat');
 const cleanCSS = require('gulp-clean-css');
+const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
-const order = require('gulp-order');
+const imagemin = require('gulp-imagemin');
+const imageResize = require('gulp-image-resize');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
 
-// Task to concatenate all .scss and output to dist.css
-gulp.task('sass', function() {
-  return gulp.src('styles/compile.scss') // get compile.scss. This file has all our imports in it.
-    .pipe(sourcemaps.init())
-    .pipe(sass()) // compile SCSS to CSS
-    .pipe(concat('dist.css')) // concatenate all CSS files into one
-    .pipe(cleanCSS()) // minify the CSS
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('styles')); // output the file to the dist folder
+/* Admin .scss
+-------------------------------------------------------------- */
+gulp.task('adminsass', function () {
+   return gulp
+   .src('admin/acf-custom-styles.scss')
+   .pipe(sourcemaps.init())
+   .pipe(concat('dist.css'))
+   .pipe(sass().on('error', sass.logError))
+   .pipe(postcss([autoprefixer()]))
+   .pipe(cleanCSS())
+   .pipe(sourcemaps.write())
+   .pipe(gulp.dest('admin'));
 });
 
-//Task to concatenate all .js and output to dist.css
+/* Theme .scss
+-------------------------------------------------------------- */
+gulp.task('sass', function () {
+  return gulp
+  .src('styles/compile.scss')
+   .pipe(sourcemaps.init())
+   .pipe(concat('dist.css'))
+   .pipe(sass().on('error', sass.logError))
+   .pipe(postcss([autoprefixer()]))
+   .pipe(cleanCSS())
+   .pipe(sourcemaps.write())
+   .pipe(gulp.dest('styles'));
+});
+
+/* Theme .js
+-------------------------------------------------------------- */
 gulp.task('scripts', function() {
   return gulp
     .src('scripts/custom/**/*.js')
@@ -28,8 +49,26 @@ gulp.task('scripts', function() {
     .pipe(gulp.dest('scripts'));
 });
 
-// Run all gulp tasks on save
-gulp.task('watch', function() {
-  gulp.watch('styles/**/*.scss', gulp.parallel('sass'));
-  gulp.watch('scripts/**/*.js', gulp.parallel('scripts'));
+/* Media
+-------------------------------------------------------------- */
+// imgOpt - This task will crop any image inside the assets/images folder to a max-width of 1400px and compress and optimize the image.
+gulp.task('imgOpt', function() {
+  return gulp.src('assets/images/*')
+    .pipe(imageResize({
+      width: 1400,
+      height: null,
+      crop: false,
+      upscale: false
+    }))
+    .pipe(imagemin())
+    .pipe(gulp.dest('assets/images'))
 });
+
+/* Watch task
+-------------------------------------------------------------- */
+gulp.task('watch', gulp.series('adminsass', 'sass', 'scripts', 'imgOpt', function() {
+  gulp.watch('admin/**/*.scss', gulp.series('adminsass'));
+  gulp.watch('styles/**/*.scss', gulp.series('sass'));
+  gulp.watch('scripts/**/*.js', gulp.series('scripts'));
+  gulp.watch('assets/images/*', gulp.series('imgOpt'));
+}));

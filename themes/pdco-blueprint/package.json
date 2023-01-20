@@ -9,16 +9,17 @@
   "author": "Rhan Pemberton",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^4.0.2"
-  },
-  "dependencies": {
+    "autoprefixer": "^10.4.13",
+    "gm": "^1.25.0",
+    "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
-    "gulp-order": "^1.2.0",
+    "gulp-image-resize": "^0.13.1",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-postcss": "^9.0.1",
     "gulp-sass": "^5.1.0",
-    "gulp-sass-glob": "^1.1.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
-    "sass": "^1.57.1"
+    "node-sass": "^8.0.0"
   }
 }
